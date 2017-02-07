@@ -710,7 +710,7 @@ As explained earlier, the **Vehicle Tracking** class takes over managing the **V
 
 ![Before Disruption](./output_images/just-before-vehicle-tracking-disruption.png)
 
-As you can see, the front end of the road way in 'birds-eye' view is beginning to peal away at the front in the image at the lower right corner in **Frame 485**.  And now when the vehicle tracking is disrupted at **Frame 486**.  Notice that the height of the bounding cube is now lower than the vehicle?  Why is that?  What is actually means is that the points near the vanishing point in our perspective view has a higher gradient than from where we are, and so the lines that we are projecting from Z=0 is no longer tall enough to reach the tracked vehicle.  We will not go into details on how we will compensate for this effect, other than that we are using stabilization to counter it.
+As you can see, the front end of the road way in 'birds-eye' view is beginning to peal away at the front in the image at the lower right corner in **Frame 485**.  And now when the vehicle tracking is disrupted at **Frame 486**.  Notice that the height of the bounding cube is now lower than the vehicle?  Why is that?  What this actually means is that the points near the vanishing point in our perspective view has a higher gradient than from where we are, and so the vertical lines that we are projecting from, where Z=0, is no longer tall enough to reach the tracked vehicle's top.  We will not go into details on how we will compensate for this effect, other than that we are using stabilization to counter it.
 
 ![After Disruption](./output_images/just-after-vehicle-tracking-disruption.png)
 
