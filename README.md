@@ -649,6 +649,21 @@ Ok, now we have our 3D voxel solution space, how do we go about detecting vehicl
 
 And in the end, we decided to use the **CHOGRGB4** HOG features with the SciKit-Learn Support Vector Machine (SVM) linear classifier: [http://scikit-learn.org/stable/modules/svm.html](http://scikit-learn.org/stable/modules/svm.html).  This HOG feature had the most dynamic range and was very responsive to vehicle detection.  So much so, we had to tune it down quite a bit to reduce its false-positves.
 
+#### 3.2.1 Performance
+
+So, what kind of performance did we achieve with these new techniques?  Recall we were getting around 1 seconds a frame with just processing HOG features in the perspective view, without doing any augmentation and before removing false-positives.  Did all this work make it any better?  Actually *yes!*  The 51 seconds project video with 1260 frames, took 9 minutes 35 seconds to process by this pipeline.  So, that means it processed 1260 frames in 575 seconds, or 2.19 frames per second.  So we more than eliminated half the time it would have taken to process the video using the original method, while additionally getting new features such as confirmed visuals, distance measurements and gaining the tracked vehicles' position in 3D space.  We can further improve this using additional techinques that we will mention in section 4.
+
+```
+(tensorflow) jchen@jchen-G11CD:~/SDCND/SDC-P5$ python P5pipeline.py ../CarND-Advanced-Lane-Lines/project_video.mp4 project_video_final.mp4
+Camera Calibration data restored from camera_cal/calibrationdata.p
+video processing ../CarND-Advanced-Lane-Lines/project_video.mp4...
+[MoviePy] >>>> Building video project_video_final.mp4
+[MoviePy] Writing video project_video_final.mp4
+100%|█████████████████████████████████████▉| 1260/1261 [09:35<00:00,  2.23it/s]
+[MoviePy] Done.
+[MoviePy] >>>> Video ready: project_video_final.mp4
+```
+
 ### 3.3 Vehicle Class
 
 Once detected, our **RoadManager** create a new **Vehicle** class instance associate it with the found voxel and inserts it into an array of vehicles for further processing by the **VehicleTracking** class.  The **Vehicle** class [./p5lib/vehicle.py](./p5lib/vehicle.py) is a finite state machine that initialize and process a vehicles life cycle in our pipeline. Here are the list of its states and what they mean:
