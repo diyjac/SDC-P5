@@ -315,7 +315,7 @@ The algorithm could not look past the 4th lane line and see the additional 2 bey
 
 Now our lane lines are a little more than 64 pixels apart.  Good enough for our classifier to run without having to resize!  Yeah!  Now we have to decide how to place our sliding windows in 'birds-eye' view.
 
-*NOTE:  You may have notice that the 'birds-eye' view of the lanes in the last picture seems warped at the top, and wonder why that is.  We were stratching our heads as well, until we recalled that the projection that we are using is a plane with no ***z*** values.  What this is really telling us, is that when we did the projection, it was too low for points near the *horizon* and *vanishing point*.  In other words, beyond the rectangle we mapped on our road to do the 'birds-eye' view projection, we are going ***up hill***!  The gradient of the road surface is going up, but we have no way to adjust this in the planar projection scheme.  There are ways around this; however, it is currently beyond the scope of this project.  Some future topic for research as we will discuss in section 4!*
+*NOTE:  You may have notice that the 'birds-eye' view of the lanes in the last picture seems warped at the top, and wonder why that is.  We were stratching our heads as well, until we recalled that the projection that we are using is a plane with no* **z** *values.  What this is really telling us, is that when we did the projection, it was too low for points near the *horizon* and* **vanishing point**.  *In other words, beyond the rectangle we mapped on our road to do the 'birds-eye' view projection, we are going* **up hill**!  *The gradient of the road surface is going up, but we have no way to adjust this in the planar projection scheme.  There are ways around this; however, it is currently beyond the scope of this project.  Some future topic for research as we will discuss in section 4!*
 
 ### 2.6 Birds-eye View as a Sliding Window Canvas
 
@@ -587,7 +587,7 @@ The following is our version of the `projectPoints()` function implemented using
         return perspectiveImagePoints
 ```
 
-*NOTE: You may notice that we are using a negative ***Z*** value in our function instead of a positive one.  Why is that?  As it turns out, ***Z*** is a negative component in the equation, so in order not to force us to use a negative to express this, we choose to set the negative in the function instead.*
+*NOTE: You may notice that we are using a negative* **Z** *value in our function instead of a positive one.  Why is that?  As it turns out,* **Z** *is a negative component in the equation, so in order not to force us to use a negative to express this, we choose to set the negative in the function instead.*
 
 ### 3.2 Road Grid
 
@@ -690,7 +690,7 @@ After Vehicle Acquired state, the vehicle goes into 'Vehicle Locked' state where
 
 The vehicle may go into this state when it is being occluded from view by another vehicle going in front of it.  In this state, the **Vehicle Tracking** class will attempt to keep the two vehicles separated and monitor their locations by using the Voxel/Sliding window grid to calculate the vehicles trajectory and its most likely separation frame.  The noticeable visual in this state is the orange border around the vehicle visual and the status 'Vehicle Occluded'.  In this state, the vehicle instance is protected from being dropped by having its confidence base reduced, so it can more easily remain actively tracked.
 
-*NOTE: During times when the pipeline is subjected to rapid warping of the road surface, the **Vehicle Tracker** may place an affected vehicle instance into **Occluded** state until the disruption is over.*
+*NOTE: During times when the pipeline is subjected to rapid warping of the road surface, the* **Vehicle Tracker** *may place an affected vehicle instance into* **Occluded** *state until the disruption is over.*
 
 ![Vehicle Occluded](./output_images/vehicle-occluded.png)
 
