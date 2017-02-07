@@ -280,7 +280,7 @@ To implement a sliding window search, we need to decide what size window we want
 
 ![Initial Sliding Window Attempt](./vehicleLab/visualized/InitialSlidingWindowTest.jpg)
 
-This produced searches that had a lot of fault positives, and were too time consuming.  Took as much as a second per screen without even putting in effort to get rid of fault positives.  It was not very satisfying.
+This produced searches that had a lot of fault positives, and were too time consuming.  Took as much as a second per frame without even putting in effort to get rid of fault positives.  It was not very satisfying.
 
 ![Initial Sliding Window Test Results](./vehicleLab/visualized/InitialTest.jpg)
 
