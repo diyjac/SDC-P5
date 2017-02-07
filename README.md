@@ -126,7 +126,7 @@ We started out with a set of vehicle and non-vehicle images obtained from [GTI v
 
 So, since we abandoned our given training and testing set, what do we do?  Well, we will collect our own!  We written a special mode in our P5pipeline CLI to collect samples from our project video using the sliding windows.  So, instead of detecting vehicles using the sliding window boxes, we will use them instead to extract our training and testing dataset.  We arranged the windows in a special way, more on this in *section 2.4, Sliding Windows*, so we would not have to do resizing of the images.  Below are some results from our data collection.  Now that we done our own data collection, we can appreciate all of the efforts of hand classifying datasets done by others!  Data collecting and classifying are not easy tasks.  Our 7441 samples of Car images in the new dataset collection includes:
 
-![Example Car 1](./vehicles/20170124191131/0726/imgExt006.jpg)  ![Example Car 2](./vehicles/20170124191131/0726/imgExt007.jpg)  ![Example Car 3](./vehicles/20170124191131/0726/imgExt008.jpg)  ![Example Mislabeled 4](./vehicles/20170124191131/0726/imgExt012.jpg)  ![Example Car 5](./vehicles/20170124191131/0726/imgExt013.jpg)  ![Example Car 6](./vehicles/20170124191131/0726/imgExt014.jpg)  ![Example Mislabeled 7](./vehicles/20170124191131/0726/imgExt015.jpg)  ![Example Car 8](./vehicles/20170124191131/0726/imgExt016.jpg)  ![Example Car 9](./vehicles/20170124191131/0391/imgExt018.jpg)  ![Example Mislabeled 10](./vehicles/20170124191131/1000/imgExt009.jpg)  ![Example Car 11](./vehicles/20170124191131/1000/imgExt012.jpg)  ![Example Car 12](./vehicles/20170124191131/1000/imgExt013.jpg)  
+![Example Car 1](./vehicles/20170124191131/0726/imgExt006.jpg)  ![Example Car 2](./vehicles/20170124191131/0726/imgExt007.jpg)  ![Example Car 3](./vehicles/20170124191131/0726/imgExt008.jpg)  ![Example Car 4](./vehicles/20170124191131/0726/imgExt012.jpg)  ![Example Car 5](./vehicles/20170124191131/0726/imgExt013.jpg)  ![Example Car 6](./vehicles/20170124191131/0726/imgExt014.jpg)  ![Example Car 7](./vehicles/20170124191131/0726/imgExt015.jpg)  ![Example Car 8](./vehicles/20170124191131/0726/imgExt016.jpg)  ![Example Car 9](./vehicles/20170124191131/0391/imgExt018.jpg)  ![Example Car 10](./vehicles/20170124191131/1000/imgExt009.jpg)  ![Example Car 11](./vehicles/20170124191131/1000/imgExt012.jpg)  ![Example Car 12](./vehicles/20170124191131/1000/imgExt013.jpg)  
 
 And 19034 images of Non-Cars:
 
@@ -542,7 +542,7 @@ So, first we need to teach our **Projection Manager** how to project a pixel in 
 
 ![3D Reconstruction Examples in OpenCV](./images/opencv-render-a-cube.png)
 
-We tried using the examples and use the `cv2.solvePnPRansac`, `cv2.projectPoint` and `cv2.drawContours` functions draw a cube on the road surface, but that did not seem right.  If you notice, the cubes are separated from the road surface, especially the cubes in the 3rd lane.  They seem to hoover about 2 foot from the ground instead of lying there where they were suppose to be projected.
+We tried using the examples and use the `cv2.solvePnPRansac`, `cv2.projectPoint` and `cv2.drawContours` functions draw a cube on the road surface, but that did not seem right.  If you notice, the cubes are separated from the road surface, especially the cubes in the 3rd lane.  They seem to hoover about 2 feet from the ground instead of lying there where they were suppose to be projected.
 
 ![3D Reconstruction Using `cv2.solvePnPRansac`, `cv2.projectPoint` and `cv2.drawContours` functions](./output_images/test1proj-bad-calibration-cube-test.jpg)
 
@@ -554,7 +554,7 @@ We notice that there were only *X,Y* coordinate mapping in the equation, but no 
 
 ![Our Warp Perspective Equation for 3D Reconstructure](./images/perspectiveTransformEquationPlusZ.png)
 
-Now, does this equation make sense?  If your *Z* value is close to the you, meaning the *Y* coordinate in the 'birds-eye' view is near, the same height line will be larger in *Y* value when transform in perspective than a *Z* value belonging to a 3D point further away in *either* the *X* or *Y* value in the 'birds-eye' view.  That seems correct.  Why don't we try and find out by example.  Let try doing our calibration cube test again with the new equation.
+Now, does this equation make sense?  If your *Z* value is close to the you, meaning the *Y* coordinate in the 'birds-eye' view is near, the same height line will be longer in the *Y* axis when transform in perspective than a *Z* value belonging to a 3D point further away in *either* the *X* or *Y* value in the 'birds-eye' view.  That seems correct.  Why don't we try and find out by example.  Let try doing our calibration cube test again with the new equation.
 
 ![3D REconstruction Using New Equation](./output_images/test1proj-calibration-cube-corrected.jpg)
 
@@ -587,16 +587,19 @@ The following is our version of the `projectPoints()` function implemented using
         return perspectiveImagePoints
 ```
 
+*NOTE: You may notice that we are using a negative **Z** value in our function instead of a positive one.  Why is that?  As it turns out, **Z** is a negative component in the equation, so in order not to force us to use a negative to express this, we choose to set the negative in the function instead.*
+
 ### 3.2 Road Grid
 
-Now we have a way to draw 3D points, lines, curves, etc. from world coordinates to the perspective view, we need a way to map our 3D objects.  Now if you look more closely at the scene above were we drew the *Road Pathway*, you will also see a set of grid lines drawn.  This was a test to see how uniform the road surface was and if we could use it as a map for finding vehicles.  Actually, for the most part, the answer was yes.  There are some issues that we will discuss later in section 3.3, but for the most part the road surface is quite uniform.  The implementation discussed below can be found in [./p5lib/roadGrid.py](./p5lib/roadGrid.py), which is our sliding windows and voxel implimentation.
+Now we have a way to draw 3D points, lines, curves, etc. from world coordinates to the perspective view, we need a way to map our 3D objects.  Now if you look more closely at the scene above where we drew the *Road Pathway*, you will also see a set of grid lines drawn.  This was a test to see how uniform the road surface was and if we could use it as a map for finding vehicles.  Actually, for the most part, the answer was yes.  There are some issues that we will discuss later in section 3.3, but for the most part the road surface is quite uniform.  The implementation discussed below can be found in [./p5lib/roadGrid.py](./p5lib/roadGrid.py), which is our sliding windows and voxel implimentation.
 
 #### 3.2.1 Sentinal Sliding Windows
 
-So, how do we search and detect vehicles on the road surface?  Don't we have the same problem as we did if we did it in perspective?  Actually, no, because, the surface of the road is usually uniform enough for us to use the same size sliding windows for detecting vehicles that we would normally have to resize for detecting vehicles that are near.  Recall the sliding window tests that we did in section 2.6.  But what able needing to scan all of the sliding windows?  Aren't they just as slow?  Well, that is interesting.  Think about this for a moment.  For the start of a video, or just an image, then yes, we would need to scan the whole surface of the roadway; however, if we have a video, we just need to do it at the beginning in the first frame.  Then after that, vehicles can only enter the scene from lanes far away near the horizon, from the back of our vehicle from other lanes left or right of us, or from an on ramp that is on the left or right of us!  That means all of the sliding window scanning that we needed to do in perspective can be pretty much turned off when we go into later frames.  Or what we call *Sentinal* mode, recall from section 2.6.
+So, how do we search and detect vehicles on the road surface?  Don't we have the same problem as we did if we did it in perspective?  Actually, no, because, the surface of the road is usually uniform enough for us to use the same size sliding windows for detecting vehicles that we would normally have to resize for detecting vehicles that are near.  Recall the sliding window tests that we did in section 2.6.  But what about needing to scan all of the sliding windows?  Aren't they just as slow?  Well, that is interesting.  Think about this for a moment.  For the start of a video, or just an image, then yes, we may need to scan the whole surface of the roadway; however, if we have a video, we just need to do it at the beginning in the first frame.  Then after that, vehicles can only enter the scene from lanes far away near the horizon, from the back of our vehicle from other lanes left or right of us, or from an on ramp that is on the left or right of us!  That means all of the sliding window scanning that we needed to do in perspective can be pretty much turned off when we go into later frames.  Or what we call *Sentinal* mode, recall from section 2.6.
 
 #### 3.2.2 Voxelization and Using Occlusion Culling
-Ok, but besides that what else can we do to reduce our search space?  Since our solution space is now in 3D, we can use a techique called Voxel Occlusion to cull, or remove grids/sliding windows from our vehicle detection HOG feature tests.  What does that mean though?  Voxel is a 3D rendered pixel or picture element.  Because of occlusion, the idea is if a Voxel is in front of another, you don't need to render the Voxel behind it.  It is hidden and do not require us to traverse it in our search space.  The same idea applies for search for vehicles.  If you already know a vehicle is behind another, then that is just tracking.  If a new vehicle shows up, and it is detected, we don't need to search for anything behind it because it it hidden and cannot be seen, so would be a waste of time.  You can find more about voxel here: [https://en.wikipedia.org/wiki/Voxel](https://en.wikipedia.org/wiki/Voxel).  In particular, this paper [Voxel Occlusion Testing: A Shadow Determination Accelerator for RaY Tracing](https://pdfs.semanticscholar.org/7681/b23463516d3ef8dda39fff1be9d40a89f510.pdf) is of interest.  In it, you will find this diagram that give you a picture of what we are trying to do:
+
+Ok, but besides that what else can we do to reduce our search space?  Since our solution space is now in 3D, we can use a techique called Voxel Occlusion to cull, or remove grids/sliding windows from our vehicle detection HOG feature tests.  What does that mean though?  Voxel is a rendered pixel or picture element in 3D space.  Because of occlusion, the idea is if a Voxel is in front of another, you don't need to render the Voxel behind it.  It is hidden and do not require us to traverse it in our search space.  The same idea applies for search for vehicles.  If you already know a vehicle is behind another, then that is just tracking.  If a new vehicle shows up, and it is detected, we don't need to search for anything behind it because it it hidden and cannot be seen, so would be a waste of time.  You can find more about voxel here: [https://en.wikipedia.org/wiki/Voxel](https://en.wikipedia.org/wiki/Voxel).  In particular, this paper [Voxel Occlusion Testing: A Shadow Determination Accelerator for RaY Tracing](https://pdfs.semanticscholar.org/7681/b23463516d3ef8dda39fff1be9d40a89f510.pdf) is of interest.  In it, you will find this diagram that give you a picture of what we are trying to do:
 
 ![Voxel Occlusion Testing](./images/voxel-occlusion-testing.png)
 
@@ -693,7 +696,7 @@ The vehicle may go into this state when it is being occluded from view by anothe
 
 #### 3.3.7 Vehicle Leaving
 
-The vehicle may go into this state when it is leaving the scene by going behind our vehicle or moving beyond our visual range in front.  The vehicle goes to this state whenever the **Vehicle Tracking** class notice that the vehicle appears to be going behind our vehicle in the back, or disappearing from view in the front.  The noticeable visual in this state is the red border around the vehicle visual and the status 'Vehicle Leaning'.
+The vehicle may go into this state when it is leaving the scene by going behind our vehicle or moving beyond our visual range in front.  The vehicle goes to this state whenever the **Vehicle Tracking** class notice that the vehicle appears to be going behind our vehicle in the back, or disappearing from view in the front.  The noticeable visual in this state is the red border around the vehicle visual and the status 'Vehicle Leaving'.
 
 ![Vehicle Leaving](./output_images/vehicle-leaving.png)
 
@@ -725,7 +728,7 @@ Another tracking issue we discovered was that there may actually be too many vox
 
 ### 3.5 Areas where the Pipeline Breaks
 
-As with all software made by humans, this pipeline is not perfect.  There are many things still left to do.  Many are discussed in section 4, so we will not go through them here.  We already discussed the ***shakiness*** issue that is caused by traveling on an uneven road surface in section 3.4.  Also, this pipeline is not generic.  It has a specific goal in mind, to be able to detect and track vehicles in a multi-lane highway using 3D reconstruction techniques.  This pipeline would be less than ideal for detecting and tracking parked vehicles at the side of the road.
+As with all software made by humans, this pipeline is not perfect.  There are many things still left to do.  Many are discussed in section 4, so we will not go through them here.  We already discussed the ***shakiness*** issue that is caused by traveling on an uneven road surface in section 3.4.  Also, this pipeline is not generic.  It has a specific goal in mind, to be able to detect and track vehicles in a multi-lane highway using 3D reconstruction techniques.  This pipeline would be less than ideal for detecting and tracking parked vehicles at the side of the road for instance.
 
 #### 3.5.1 Pipeline Assumptions:
 
@@ -738,7 +741,7 @@ As with all software made by humans, this pipeline is not perfect.  There are ma
 
 False-positives are still an issue with the CHOGRGB4 HOG features used in the SVM linear classifier.  The **Vehicle Tracking** class attempts to reject them as soon as it is able, but there are side effects that cannot be removed unless we delay detection.  Here are some examples of the *Phantoms*:
 
-In this example, the phantom is the scan with no vehical visual.
+In this example, the phantom is the scan with no vehicle visual.
 
 ![Phantom1](./output_images/phantom1.png)
 
@@ -771,7 +774,7 @@ Another possibility is to use a different training set to identify makes and mod
 
 ### 4.3 Road Surface Point Cloud Generation and Tesselation
 
-Currently we are modeling the surface of the road as a flat plane, which in general works, but does not fully explain the 3D reconstucted scene.  A more robust solution would create point clouds using the deformaties that are projected back into the 'birds-eye' view by the warp function.  The non-uniformity in the images points to a way to extract the 3D point cloud from the model and re-project them back into a 3D space.  If this hypothesis works, then the 3D point clouds created by the projection anomalies can be tesselated into a surface that truely represents the road surface including its surface gradients.
+Currently we are modeling the surface of the road as a flat plane, which in general works, but does not fully explain the 3D reconstucted scene.  A more robust solution would create point clouds using the deformalities that are projected back into the 'birds-eye' view by the warp function.  The non-uniformity in the images points to a way to extract the 3D point cloud from the model and re-project them back into a 3D space.  If this hypothesis works, then the 3D point clouds created by the projection anomalies can be tesselated into a surface that truely represents the road including its surface gradients.
 
 ### 4.4 Voxelization and OpenGL Rendering
 
@@ -781,7 +784,7 @@ Voxelization techiques are used in GPU accelerated 3D graphics rendering.  An ex
 
 ### 4.5 As a Tool for Automated Data Collection and Classification
 
-This pipeline can be modified and used as a way to collect and classify images of vehicles in profile.  As can be seen in the tracking profile images during tracking, these images can be copied and stored for later training by ML vehicle detection models by just processing a video of the roadway.
+This pipeline can be modified and used as a way to collect and classify images of vehicles in profile.  As can be seen in the visual profile images during tracking, these images can be copied and stored for later training by ML vehicle detection models by just processing a video of the roadway.
 
 ### 4.6 As a Tool for Re-Enforcement Learning to Train Steering Models
 
@@ -789,7 +792,7 @@ Another use case for this pipeline is as a re-enforcement learning trainer for a
 
 ### 4.7 Enhancements
 
-Additional enhancements that could improve this vehicle detection and tracking proof-of-concept is add to speed monitoring of both our vehicle and the others by counting the lane line segments and gaps (12 meters per segment and gap) and calculate the speed of travel.  We can calculate the speed of the other vehicles by adding their relative speed difference to our calculated speed for our own vehicle to come up with a total.
+Additional enhancements that could improve this vehicle detection and tracking proof-of-concept is to add speed monitoring of both our vehicle and the others by counting the lane line segments and gaps (12 meters per segment and gap) and calculate the speed of travel.  We can calculate the speed of the other vehicles by adding their relative speed difference to our calculated speed for our own vehicle to come up with a total.
 
 ### 4.8 In Conclusion
 
