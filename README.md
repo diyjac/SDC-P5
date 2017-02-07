@@ -287,7 +287,7 @@ We decided to look at our previous **Project 4, Advanced Lane Finding** and prev
 
 ![The Kernel Trick](./images/data_2d_to_3d.png)
 
-Consider you are trying to separate the data points represented by the red dots from the blue dots on the left chart.  How can we do using a linear separator?  The answer is to project the points to a higher 3rd dimensional space and then separate them there with a plane as depected on the right.  Here is an exellent article about this here: [http://www.eric-kim.net/eric-kim-net/posts/1/kernel_trick.html](http://www.eric-kim.net/eric-kim-net/posts/1/kernel_trick.html).
+Consider you are trying to separate the data points represented by the red dots from the blue dots on the left chart.  How can we do using a linear separator?  The answer is to project the points to a higher 3rd dimensional space and then separate them there with a plane as depected on the right.  There is an exellent article about this here: [http://www.eric-kim.net/eric-kim-net/posts/1/kernel_trick.html](http://www.eric-kim.net/eric-kim-net/posts/1/kernel_trick.html).
 
 So, what have we learned from previous projects and lesson that can help?  Then the idea of the unwarping from perspective to birds-eye view came to mind and why that was necessary for measuring the curvature of the road.  If only we could use that somehow.  Part of the problem is that even if we could do this, the birds-eye view's resolution was not good enough.  We have too much noise in the image to do the sliding window detection.  But it was something to think about, so why not give it a try?
 
