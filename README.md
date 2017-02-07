@@ -542,7 +542,7 @@ So, first we need to teach our **Projection Manager** how to project a pixel in 
 
 ![3D Reconstruction Examples in OpenCV](./images/opencv-render-a-cube.png)
 
-We tried using the examples and use the `cv2.solvePnPRansac`, `cv2.projectPoint` and `cv2.drawContours` functions draw a cube on the road surface, but that did not seem right.  If you notice, the cubes are separated from the road surface, especially the cubes in the 3rd lane.  They seem to hoover about 2 feet from the ground instead of lying there where they were suppose to be projected.
+We tried using the examples and use the `cv2.solvePnPRansac`, `cv2.projectPoint` and `cv2.drawContours` functions to draw a cube on the road surface, but what was drawn did not seem right.  If you notice, the cubes are separated from the road surface, especially the cubes in the 3rd lane.  They seem to hoover about 2 feet off the ground instead of lying there where they were suppose to be projected.
 
 ![3D Reconstruction Using `cv2.solvePnPRansac`, `cv2.projectPoint` and `cv2.drawContours` functions](./output_images/test1proj-bad-calibration-cube-test.jpg)
 
