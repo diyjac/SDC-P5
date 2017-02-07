@@ -40,7 +40,7 @@ To achieve the design goals, we will create a pipeline made of 12 components.  E
 6. **Road Grid:** Python class that handles uniform grid placement for our sliding windows implementation and provides **Voxel Occlusion** testing as part of our AI technique, constraints propagation, to reduce the search space.
 7. **VehicleDetection:** Python class that handles vehicle detection.  It has two modes
      * Full Scan: This is during initialization when all of the lanes and all positions, 224 in a four-lane highway, are used in the sliding window before **Voxel Occlusion** constraint propagation technique is applied.
-     * Sentinal Scan:  This is for video after full scan is complete.  Only entry points in the lane lines are now scanned; and thus, drastically reduce number of sliding window searchs per frame from 224 to just ***9*** for a four lane highway even before applying **Voxel Occlusion** constraint propagation.
+     * Sentinel Scan:  This is for video after full scan is complete.  Only entry points in the lane lines are now scanned; and thus, drastically reduce number of sliding window searchs per frame from 224 to just ***9*** for a four lane highway even before applying **Voxel Occlusion** constraint propagation.
 8. **Vehicles:** Python class that handles vehicle identification once detected.  There is a shared array of vehicles order by depth.  Nearest first to help with vehicle occlusion calculations.
 9. **VehicleTracking:** Python class that tracks vehicle once identified.  It keeps a life cycle of vehicles tracked including occlusion when one vehicle goes in front of another.  Handles vehicle contour calculations and masking.
 10. **RoadManager:** Python class that handles image, projection and lanes, lines and vehicle propagation pipeline decisions.
@@ -404,9 +404,9 @@ You will notice that there is a `complete` flag in the parameter to the slidingW
 
 ![Complete Sliding Window](./vehicleLab/visualized/CHOG-TEST-XO-augmented.jpg)
 
-And this is what it looks like when we do a *sentinal* scan:
+And this is what it looks like when we do a *sentinel* scan:
 
-![Sentinal Sliding Window](./vehicleLab/visualized/CHOG-TEST-XO2-augmented.jpg)
+![Sentinel Sliding Window](./vehicleLab/visualized/CHOG-TEST-XO2-augmented.jpg)
 
 A lot fewer sliding windows to manage and search per frame.  So, how well does it work?  Let's test it out in the next section.
 
@@ -593,9 +593,9 @@ The following is our version of the `projectPoints()` function implemented using
 
 Now we have a way to draw 3D points, lines, curves, etc. from world coordinates to the perspective view, we need a way to map our 3D objects.  Now if you look more closely at the scene above where we drew the *Road Pathway*, you will also see a set of grid lines drawn.  This was a test to see how uniform the road surface was and if we could use it as a map for finding vehicles.  Actually, for the most part, the answer was yes.  There are some issues that we will discuss later in section 3.3, but for the most part the road surface is quite uniform.  The implementation discussed below can be found in [./p5lib/roadGrid.py](./p5lib/roadGrid.py), which is our sliding windows and voxel implimentation.
 
-#### 3.2.1 Sentinal Sliding Windows
+#### 3.2.1 Sentinel Sliding Windows
 
-So, how do we search and detect vehicles on the road surface?  Don't we have the same problem as we did if we did it in perspective?  Actually, no, because, the surface of the road is usually uniform enough for us to use the same size sliding windows for detecting vehicles that we would normally have to resize for detecting vehicles that are near.  Recall the sliding window tests that we did in section 2.6.  But what about needing to scan all of the sliding windows?  Aren't they just as slow?  Well, that is interesting.  Think about this for a moment.  For the start of a video, or just an image, then yes, we may need to scan the whole surface of the roadway; however, if we have a video, we just need to do it at the beginning in the first frame.  Then after that, vehicles can only enter the scene from lanes far away near the horizon, from the back of our vehicle from other lanes left or right of us, or from an on ramp that is on the left or right of us!  That means all of the sliding window scanning that we needed to do in perspective can be pretty much turned off when we go into later frames.  Or what we call *Sentinal* mode, recall from section 2.6.
+So, how do we search and detect vehicles on the road surface?  Don't we have the same problem as we did if we did it in perspective?  Actually, no, because, the surface of the road is usually uniform enough for us to use the same size sliding windows for detecting vehicles that we would normally have to resize for detecting vehicles that are near.  Recall the sliding window tests that we did in section 2.6.  But what about needing to scan all of the sliding windows?  Aren't they just as slow?  Well, that is interesting.  Think about this for a moment.  For the start of a video, or just an image, then yes, we may need to scan the whole surface of the roadway; however, if we have a video, we just need to do it at the beginning in the first frame.  Then after that, vehicles can only enter the scene from lanes far away near the horizon, from the back of our vehicle from other lanes left or right of us, or from an on ramp that is on the left or right of us!  That means all of the sliding window scanning that we needed to do in perspective can be pretty much turned off when we go into later frames.  Or what we call *Sentinel* mode, recall from section 2.6.
 
 #### 3.2.2 Voxelization and Using Occlusion Culling
 
