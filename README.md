@@ -315,7 +315,7 @@ The algorithm could not look past the 4th lane line and see the additional 2 bey
 
 Now our lane lines are a little more than 64 pixels apart.  Good enough for our classifier to run without having to resize!  Yeah!  Now we have to decide how to place our sliding windows in 'birds-eye' view.
 
-*NOTE:  You may have notice that the 'birds-eye' view of the lanes in the last picture seems warped at the top, and wonder why that is.  We were stratching our heads as well, until we recalled that the projection that we are using is a plane with no **z** values.  What this is really telling us, is that when we did the projection, it was too low for points near the *horizon* and *vanishing point*.  In other words, beyond the rectangle we mapped on our road to do the 'birds-eye' view projection, we are going **up hill**!  The gradient of the road surface is going up, but we have no way to adjust this in the planar projection scheme.  There are ways around this; however, it is currently beyond the scope of this project.  Some future topic for research as we will discuss in section 4!*
+*NOTE:  You may have notice that the 'birds-eye' view of the lanes in the last picture seems warped at the top, and wonder why that is.  We were stratching our heads as well, until we recalled that the projection that we are using is a plane with no ***z*** values.  What this is really telling us, is that when we did the projection, it was too low for points near the *horizon* and *vanishing point*.  In other words, beyond the rectangle we mapped on our road to do the 'birds-eye' view projection, we are going ***up hill***!  The gradient of the road surface is going up, but we have no way to adjust this in the planar projection scheme.  There are ways around this; however, it is currently beyond the scope of this project.  Some future topic for research as we will discuss in section 4!*
 
 ### 2.6 Birds-eye View as a Sliding Window Canvas
 
@@ -587,7 +587,7 @@ The following is our version of the `projectPoints()` function implemented using
         return perspectiveImagePoints
 ```
 
-*NOTE: You may notice that we are using a negative **Z** value in our function instead of a positive one.  Why is that?  As it turns out, **Z** is a negative component in the equation, so in order not to force us to use a negative to express this, we choose to set the negative in the function instead.*
+*NOTE: You may notice that we are using a negative ***Z*** value in our function instead of a positive one.  Why is that?  As it turns out, ***Z*** is a negative component in the equation, so in order not to force us to use a negative to express this, we choose to set the negative in the function instead.*
 
 ### 3.2 Road Grid
 
@@ -706,11 +706,11 @@ There is no visual for this state, other than the vehicle's visuals will disappe
 
 ### 3.4 Vehicle Tracking
 
-As explained earlier, the **Vehicle Tracking** class takes over managing the **Vehicle** class when it goes into *Locked* state.  In this state, the **Vehicle Tracking** class will monitor the vehicle's visual and tries to maintain its visual in the center of the projection.  It does this by using a mask of the vehicle created by using its identified color.  The **Vehicle Tracking** class also takes care of confidence calculations by counting the number of points in the mask it currently was able to find and compair that count with a confidence base that it calculated as an average of points it collected per frame for that vehicle since initialized.  This usually works quite well in tracking the vehicle until we meet with rough road conditions where the road surface may peal away from the plane and the vehicle becomes lost.  Here is an example:
+As explained earlier, the **Vehicle Tracking** class takes over managing the **Vehicle** class when it goes into *Locked* state.  In this state, the **Vehicle Tracking** class will monitor the vehicle's visual and tries to maintain its visual in the center of the projection.  It does this by using a mask of the vehicle created by using its identified color.  The **Vehicle Tracking** class also takes care of confidence calculations by counting the number of points in the mask it currently was able to find and compare that count with a confidence base that it calculated as an average of points it collected per frame for that vehicle since initialized.  This usually works quite well in tracking the vehicle until we meet with rough road conditions where the road surface may peal away from the plane and the vehicle becomes lost.  Here is an example:
 
 ![Before Disruption](./output_images/just-before-vehicle-tracking-disruption.png)
 
-As you can see, the front end of the road way in 'birds-eye' view is beginning to peal away at the front in the image at the lower right corner in **Frame 485**.  And now when the vehicle tracking is disrupted at **Frame 486**.
+As you can see, the front end of the road way in 'birds-eye' view is beginning to peal away at the front in the image at the lower right corner in **Frame 485**.  And now when the vehicle tracking is disrupted at **Frame 486**.  Notice that the height of the bounding cube is now lower than the vehicle?  Why is that?  What is actually means is that the points near the vanishing point in our perspective view has a higher gradient than from where we are, and so the lines that we are projecting from Z=0 is no longer tall enough to reach the tracked vehicle.  We will not go into details on how we will compensate for this effect, other than that we are using stabilization to counter it.
 
 ![After Disruption](./output_images/just-after-vehicle-tracking-disruption.png)
 
