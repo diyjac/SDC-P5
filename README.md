@@ -1,4 +1,7 @@
 # Udacity Self-Driving Car Project 5
+
+![Cover-Art](./output_images/cover-art2.png)
+
 ## Vehicle Detection and Tracking
 
 **Objective:** Use Histogram of Oriented Gradients (HOG) feature extraction on a set of labeled vehicle and non-vehicle images to train a classifier to detect vehicles in a video.
