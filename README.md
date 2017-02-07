@@ -110,7 +110,7 @@ optional arguments:
 ```
 
 
-*Please Note:  This document is fully annotated with diagrams and code segments.  **Be warned!  This project is not a typical one**.  We will go in depth into some of the reasoning of this, and how we came to the conclusion that we needed to identify multiple lanes, and be able to track the vehicles in 3D space to accurately identify and track vehicles.  **Real vehicles, like us, do not exists in 2D, and should not be identified and tracked in 2D only.**  The sections below may be out of sequence due to the nature of the project assignment and conforming to the **rubric**.  Once this project review is complete, we will rewrite it in a more narrative format as to better convey the process of discovery to add to our profolio.*
+*Please Note:  This document is fully annotated with diagrams and code segments.* **Be warned!  This project is not a typical one**.  *We will go in depth into some of the reasoning of this, and how we came to the conclusion that we needed to identify multiple lanes, and be able to track the vehicles in 3D space to accurately identify and track vehicles.*  **Real vehicles, like us, do not exists in 2D, and should not be identified and tracked in 2D only.**  *The sections below may be out of sequence due to the nature of the project assignment and conforming to the* **rubric**.  *Once this project review is complete, we will rewrite it in a more narrative format as to better convey the process of discovery to add to our profolio.*
 
 ## 2 Histogram of Oriented Gradients (HOG)
 
