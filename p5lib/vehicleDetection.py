@@ -21,7 +21,7 @@ import os
 from sklearn.svm import LinearSVC
 from sklearn.preprocessing import StandardScaler
 from skimage.feature import hog
-from sklearn.externals import joblib
+import joblib
 from p5lib.roadGrid import RoadGrid
 
 
@@ -39,8 +39,8 @@ class VehicleDetection():
         self.cspace = cspace
         self.hog_channel = hog_channel
         if versionName is not None:
-            self.trained_model = './trained/' + versionName + '.pkl'
-            self.trained_scalar = './trained/scaler' + versionName + '.pkl'
+            self.trained_model = 'vehicleLab/trained/' + versionName + '.pkl'
+            self.trained_scalar = 'vehicleLab/trained/scaler' + versionName + '.pkl'
             self.svc = joblib.load(self.trained_model)
         self.orient = orient
         self.pix_per_cell = pix_per_cell
